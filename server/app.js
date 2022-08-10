@@ -4,6 +4,20 @@ const schema = require('./schema/schema.js');
 
 const app = express();
 
+const mongoose = require('mongoose');
+mongoose.connect('mongodb+srv://prashantkushwaha003:test123@cluster0.cscusqu.mongodb.net/?retryWrites=true&w=majority', 
+{useNewUrlParser: true },(err) => {
+    {
+      if(err) {
+          console.log('Some problem with the connection ' +err);
+      } else {
+          console.log('The Mongoose connection is ready');
+      }
+    }
+  })
+
+
+
 app.use('/graphql', graphqlHTTP({
   schema,   
   graphiql: true
