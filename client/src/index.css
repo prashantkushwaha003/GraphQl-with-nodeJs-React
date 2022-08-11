@@ -1,0 +1,7 @@
+body{
+    padding: 15px;
+}
+/* @import "../node_modules/bootstrap/scss/bootstrap"; */
+.title {
+    color: #eee;
+}

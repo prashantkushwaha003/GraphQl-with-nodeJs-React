@@ -4,7 +4,14 @@ const _ = require('lodash');
 const Book = require('../models/book.js');
 const Author = require('../models/author.js');
 
-const { GraphQLSchema, GraphQLObjectType, GraphQLString, GraphQLID, GraphQLInt, GraphQLList } = graphql
+const { GraphQLSchema, 
+    GraphQLObjectType,
+    GraphQLString,
+    GraphQLID,
+    GraphQLInt,
+    GraphQLList,
+    GraphQLNonNull
+} = graphql
 
 // dummy data 
 // var books = [
@@ -108,8 +115,8 @@ const Mutation = new GraphQLObjectType({
         addAuthor: {
             type: AuthorType,
             args:{
-                name: {type: GraphQLString},
-                age: {type: GraphQLInt}
+                name: {type: new GraphQLNonNull(GraphQLString)},
+                age: {type: new GraphQLNonNull(GraphQLInt)}
             },
             resolve(parent, args) {
                 let author = new Author({
@@ -119,18 +126,29 @@ const Mutation = new GraphQLObjectType({
                 return author.save();
             }
         },
+        updateAuthor: {
+            type: AuthorType,
+            args:{
+                id: {type: new GraphQLNonNull(GraphQLID)},
+                name: {type: GraphQLString},
+                age: {type: GraphQLInt}
+            },
+            resolve(parent, args) {
+                return Author.findByIdAndUpdate(args.id, { name: args.name, age: args.age})
+            }
+        },
         addBook: {
             type: BookType,
             args: {
-                name: {type: GraphQLString},
-                genre: {type: GraphQLString},
-                authoeId: {type: GraphQLID}
+                name: {type: new GraphQLNonNull(GraphQLString)},
+                genre: {type: new GraphQLNonNull(GraphQLString)},
+                authorId: {type: new GraphQLNonNull(GraphQLID)}
             },
             resolve(parent, args) {
                 let book = new Book({
                     name: args.name,
                     genre: args.genre,
-                    authorId: args.authoeId
+                    authorId: args.authorId
                 })
                 return book.save();
             }
